@@ -1,0 +1,16 @@
+import type { Request, Response, NextFunction } from "express";
+import { config } from "../config.js";
+
+export function middlewareLogResponse(req: Request, res: Response, next: NextFunction) {
+    res.on("finish", () => {
+        if (res.statusCode >= 400) {
+            console.log(`[NON-OK] ${req.method} ${req.path} - Status: ${res.statusCode}`);
+        }
+    })
+    next();
+};
+
+export function middlewareMetricsInc(req: Request, res: Response, next: NextFunction) {
+    config.fileserverHits += 1;
+    next();
+};
