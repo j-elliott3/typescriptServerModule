@@ -20,34 +20,20 @@ function cleanChirp(body: string): string {
 }
 
 export async function handlerValidateChirp(req: Request, res: Response) {
-    type parameters = {
+    type Parameters = {
         body: string;
     };
 
-    let body = "";
+    const params = req.body as Parameters;
 
-    req.on("data", (chunk) => {
-        body += chunk;
-    });
+    const maxChirpLength = 140;
+    if (params.body.length > maxChirpLength) {
+        throw new Error("Chirp is too long");
+    }
 
-    let params: parameters;
-    req.on("end", () => {
-        try {
-            params = JSON.parse(body);
-        } catch (err) {
-            respondWithError(res, 400, "Invalid JSON");
-            return;
-        }
-        const maxChirpLength = 140;
-        if (params.body.length > maxChirpLength) {
-            respondWithError(res, 400, "Chirp is too long");
-            return;
-        }
+    const cleanedBody = cleanChirp(params.body);
 
-        const cleanedBody = cleanChirp(params.body);
-
-        respondWithJSON(res, 200, {
-            cleanedBody: cleanedBody,
-        });
+    respondWithJSON(res, 200, {
+        cleanedBody: cleanedBody,
     });
 }
