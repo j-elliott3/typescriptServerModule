@@ -9,8 +9,9 @@ import {
   errorMiddleware,
   errorWrapper,
 } from "./api/middleware.js";
-import { handlerValidateChirp } from "./api/chirps.js"
+import { handlerCreateChirp, getAllChirps, getSingleChirpById } from "./api/chirps.js"
 import { createNewUser } from "./api/users.js";
+import { handlerLogin } from "./api/login.js";
 
 const app = express();
 const PORT = 8080;
@@ -24,7 +25,10 @@ app.get("/api/healthz", errorWrapper(handlerReadiness));
 app.get("/admin/metrics", errorWrapper(handlerMetrics));
 app.post("/api/users", errorWrapper(createNewUser))
 app.post("/admin/reset", errorWrapper(handlerReset));
-app.post("/api/validate_chirp", errorWrapper(handlerValidateChirp));
+app.post("/api/chirps", errorWrapper(handlerCreateChirp));
+app.get("/api/chirps", errorWrapper(getAllChirps));
+app.get("/api/chirps/:chirpId", errorWrapper(getSingleChirpById));
+app.post("/api/login", errorWrapper(handlerLogin));
 
 app.use(errorMiddleware);
 
