@@ -12,6 +12,7 @@ import {
 import { handlerCreateChirp, getAllChirps, getSingleChirpById } from "./api/chirps.js"
 import { createNewUser } from "./api/users.js";
 import { handlerLogin } from "./api/login.js";
+import { handlerRefresh, handlerRevoke} from "./api/token.js";
 
 const app = express();
 const PORT = 8080;
@@ -29,6 +30,8 @@ app.post("/api/chirps", errorWrapper(handlerCreateChirp));
 app.get("/api/chirps", errorWrapper(getAllChirps));
 app.get("/api/chirps/:chirpId", errorWrapper(getSingleChirpById));
 app.post("/api/login", errorWrapper(handlerLogin));
+app.post("/api/refresh", errorWrapper(handlerRefresh));
+app.post("/api/revoke", errorWrapper(handlerRevoke));
 
 app.use(errorMiddleware);
 
