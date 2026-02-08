@@ -62,13 +62,43 @@ export async function handlerCreateChirp(req: Request, res: Response) {
 }
 
 export async function getAllChirps(req: Request, res: Response) {
-    const chirps = await getChirps();
-
-    if (!chirps) {
+    let authorId = "";
+    let authorIdQuery = req.query.authorId;
+    if (typeof authorIdQuery === "string") {
+        authorId = authorIdQuery;
+    }
+    let sortQuery = "";
+    let sortQueryType = req.query.sort;
+    if (typeof sortQueryType === "string") {
+        sortQuery = sortQueryType;
+    }
+    
+    const allChirps = await getChirps();
+    if (!allChirps) {
         throw new Error("Could not get chirps");
     }
 
-    respondWithJSON(res, 200, chirps);
+    if (sortQuery) {
+        if (sortQuery === "asc") {
+            allChirps.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+        }
+        if (sortQuery === "desc") {
+            allChirps.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        }
+    }
+    
+    if (authorId) {
+        const authorChirps = [];
+        for (const chirp of allChirps) {
+            if (chirp.userId === authorId) {
+                authorChirps.push(chirp);
+            }
+        }
+        respondWithJSON(res, 200, authorChirps);
+        return;
+    }
+
+    respondWithJSON(res, 200, allChirps);
 }
 
 export async function getSingleChirpById(req: Request, res: Response) {
