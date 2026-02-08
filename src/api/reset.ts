@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { config } from "../config.js";
-import { deleteChirps } from "../db/queries/users.js";
+import { reset } from "../db/queries/users.js";
 import { ForbiddenError } from "./errors.js";
 
 export async function handlerReset(req: Request, res: Response) {
@@ -10,7 +10,7 @@ export async function handlerReset(req: Request, res: Response) {
     }
     config.api.fileserverHits = 0;
 
-    await deleteChirps();
+    await reset();
     res.write("Hits reset to 0");
     res.end();
 };

@@ -9,10 +9,11 @@ import {
   errorMiddleware,
   errorWrapper,
 } from "./api/middleware.js";
-import { handlerCreateChirp, getAllChirps, getSingleChirpById } from "./api/chirps.js"
-import { createNewUser } from "./api/users.js";
+import { handlerCreateChirp, getAllChirps, getSingleChirpById, handlerChirpsDelete } from "./api/chirps.js"
+import { createNewUser, updateUserLoginInfo } from "./api/users.js";
 import { handlerLogin } from "./api/login.js";
 import { handlerRefresh, handlerRevoke} from "./api/token.js";
+import { handlerWebhooks } from "./api/webhooks.js";
 
 const app = express();
 const PORT = 8080;
@@ -32,6 +33,9 @@ app.get("/api/chirps/:chirpId", errorWrapper(getSingleChirpById));
 app.post("/api/login", errorWrapper(handlerLogin));
 app.post("/api/refresh", errorWrapper(handlerRefresh));
 app.post("/api/revoke", errorWrapper(handlerRevoke));
+app.put("/api/users", errorWrapper(updateUserLoginInfo));
+app.delete("/api/chirps/:chirpId", errorWrapper(handlerChirpsDelete));
+app.post("/api/polka/webhooks", errorWrapper(handlerWebhooks));
 
 app.use(errorMiddleware);
 

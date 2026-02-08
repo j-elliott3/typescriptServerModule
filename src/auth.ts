@@ -63,7 +63,7 @@ export function getBearerToken(req: Request): string {
     let authHeader = req.get("Authorization");
 
     if (!authHeader) {
-        throw new BadRequestError("Missing Authorization header");
+        throw new UnauthorizedError("Missing Authorization header");
     }
 
     return extractBearerToken(authHeader);
@@ -72,7 +72,7 @@ export function getBearerToken(req: Request): string {
 export function extractBearerToken(header: string) {
   const splitAuth = header.split(" ");
   if (splitAuth.length < 2 || splitAuth[0] !== "Bearer") {
-    throw new BadRequestError("Malformed authorization header");
+    throw new UnauthorizedError("Malformed authorization header");
   }
   return splitAuth[1];
 }

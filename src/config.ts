@@ -5,6 +5,7 @@ type Config = {
     api: APIConfig;
     db: DBConfig;
     jwt: JWTConfig;
+    polka: PolkaConfig;
 };
 
 type APIConfig = {
@@ -22,6 +23,10 @@ type JWTConfig = {
     defaultDuration: number;
     secret: string;
     issuer: string;
+};
+
+type PolkaConfig = {
+    polkaSecret: string;
 };
 
 process.loadEnvFile();
@@ -52,5 +57,8 @@ export let config: Config = {
         defaultDuration: 60 * 60, // 1 hour in seconds
         secret: envOrThrow("SECRET"),
         issuer: "chirpy",
+    },
+    polka: {
+        polkaSecret: envOrThrow("POLKA_SECRET"),
     },
 };
