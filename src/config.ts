@@ -26,7 +26,7 @@ type JWTConfig = {
 };
 
 type PolkaConfig = {
-    polkaSecret: string;
+    polkaKey: string;
 };
 
 process.loadEnvFile();
@@ -59,6 +59,6 @@ export let config: Config = {
         issuer: "chirpy",
     },
     polka: {
-        polkaSecret: envOrThrow("POLKA_SECRET"),
+        polkaKey: envOrThrow("POLKA_KEY"),
     },
 };
